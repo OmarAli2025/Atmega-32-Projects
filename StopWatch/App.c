@@ -14,31 +14,29 @@
 #include "CLD_interface.h"
 # include "util/delay.h"
 
-# define MSBHOURCOLUMN 0
-# define LSBHOURCOLUMN 1
+# define u8MSBHOURCOLUMN 0
+# define u8LSBHOURCOLUMN 1
 
-# define MSBMINUTECOLUMN 3
-# define LSBMINUTECOLUMN  4
+# define u8MSBMINUTECOLUMN 3
+# define u8LSBMINUTECOLUMN  4
 
-# define MSBSECONDCOLUMN 6
-# define LSBSECONDCOLUMN  7
+# define u8MSBSECONDCOLUMN 6
+# define u8LSBSECONDCOLUMN  7
 
+# define u8ROWNUM  0
 
 
 void  main(void)
 {
 	PORT_voidInit();
 	CLCD_voidInit();
-	uint8t local_u8KeyPressed=255;
 
+	uint8t local_u8KeyPressed=255;
 	uint8t local_u8hourMSB=0,local_u8hourLSB=0;
 	uint8t local_u8minuteMSB=0,local_u8minuteLSB=0;
 	uint8t local_u8secondMSB=0,local_u8secondLSB=0;
-	uint8t local_u8RowPos=0;
 	sint8t local_s8ColPos=0;
 	uint8t local_u8flag=0;
-
-
 
 	CLCD_voidDisplayNumber(local_u8hourMSB);
 	CLCD_voidDisplayNumber(local_u8hourLSB);
@@ -49,6 +47,7 @@ void  main(void)
 	CLCD_voidDisplayNumber(local_u8secondMSB);
 	CLCD_voidDisplayNumber(local_u8secondLSB);
 
+	/*Hamoksa*/
 	uint8t local_u8arrBody[8] =
 	{
 			0b10101,
@@ -76,10 +75,7 @@ void  main(void)
 
 
 
-	CLCD_u8GoToxyPos(local_s8ColPos,local_u8RowPos);
-
-
-
+	CLCD_u8GoToxyPos(local_s8ColPos,u8ROWNUM);
 
 	while(1)
 	{
@@ -94,14 +90,15 @@ void  main(void)
 		if(local_u8KeyPressed == 'S')
 		{
 
-			while(local_u8hourMSB   != 0 ||
-					local_u8hourLSB   != 0 ||
-					local_u8minuteMSB != 0 ||
-					local_u8minuteLSB != 0 ||
-					local_u8secondMSB != 0 ||
-					local_u8secondLSB != 0)
+			while(local_u8hourMSB 	    != 0 ||
+						local_u8hourLSB   	!= 0 ||
+						local_u8minuteMSB != 0 ||
+						local_u8minuteLSB 	!= 0 ||
+						local_u8secondMSB != 0 ||
+						local_u8secondLSB 	!= 0)
 			{
 				KPD_u8GetPressedKey(&local_u8KeyPressed);
+
 				if(local_u8KeyPressed=='C')
 				{
 					local_u8flag=0;
@@ -170,24 +167,24 @@ void  main(void)
 				}
 
 				/* Update hours */
-				CLCD_u8GoToxyPos(MSBHOURCOLUMN, 0);
+				CLCD_u8GoToxyPos(u8MSBHOURCOLUMN, 0);
 				CLCD_voidDisplayNumber(local_u8hourMSB);
 
-				CLCD_u8GoToxyPos(LSBHOURCOLUMN, 0);
+				CLCD_u8GoToxyPos(u8LSBHOURCOLUMN, 0);
 				CLCD_voidDisplayNumber(local_u8hourLSB);
 
 				/* Update minutes */
-				CLCD_u8GoToxyPos(MSBMINUTECOLUMN, 0);
+				CLCD_u8GoToxyPos(u8MSBMINUTECOLUMN, 0);
 				CLCD_voidDisplayNumber(local_u8minuteMSB);
 
-				CLCD_u8GoToxyPos(LSBMINUTECOLUMN, 0);
+				CLCD_u8GoToxyPos(u8LSBMINUTECOLUMN, 0);
 				CLCD_voidDisplayNumber(local_u8minuteLSB);
 
 				/* Update seconds */
-				CLCD_u8GoToxyPos(MSBSECONDCOLUMN, 0);
+				CLCD_u8GoToxyPos(u8MSBSECONDCOLUMN, 0);
 				CLCD_voidDisplayNumber(local_u8secondMSB);
 
-				CLCD_u8GoToxyPos(LSBSECONDCOLUMN, 0);
+				CLCD_u8GoToxyPos(u8LSBSECONDCOLUMN, 0);
 				CLCD_voidDisplayNumber(local_u8secondLSB);
 			}
 
@@ -212,9 +209,7 @@ void  main(void)
 			{
 				DIO_u8TogglePinValue(DIO_u8PORTA,DIO_u8PIN7);
 				_delay_ms(900);
-
 				KPD_u8GetPressedKey(&local_u8KeyPressed);
-
 
 				if((local_u8KeyPressed=='C'))
 				{
@@ -223,16 +218,12 @@ void  main(void)
 					DIO_u8SetPinValue(DIO_u8PORTA,DIO_u8PIN7,DIO_u8LOW);
 					break;
 				}
-
 			}
-
 		}
-
 		else if(local_u8KeyPressed=='C')
 		{
 			local_s8ColPos=0;
-			CLCD_u8GoToxyPos(local_s8ColPos,local_u8RowPos);
-
+			CLCD_u8GoToxyPos(local_s8ColPos,u8ROWNUM);
 			CLCD_voidDisplayNumber(0);
 			CLCD_voidDisplayNumber(0);
 			CLCD_voidSendData(':');
@@ -245,13 +236,11 @@ void  main(void)
 			local_u8hourMSB=0,local_u8hourLSB=0;
 			local_u8minuteMSB=0,local_u8minuteLSB=0;
 			local_u8secondMSB=0,local_u8secondLSB=0;
-			CLCD_u8GoToxyPos(local_s8ColPos,local_u8RowPos);
+			CLCD_u8GoToxyPos(local_s8ColPos,u8ROWNUM);
 
 		}
-
 		else
 		{
-
 			if(local_u8KeyPressed=='R')
 			{
 				if(local_s8ColPos==7)
@@ -261,11 +250,8 @@ void  main(void)
 				else if(local_s8ColPos==1|| local_s8ColPos==4)
 				{
 					local_s8ColPos++;
-
 				}
 				local_s8ColPos++;
-
-
 			}
 
 			else if(local_u8KeyPressed=='L')
@@ -300,7 +286,6 @@ void  main(void)
 					}
 					local_u8hourLSB=local_u8KeyPressed;break;
 
-
 				case 3:
 
 					if(local_u8KeyPressed>5)
@@ -322,12 +307,10 @@ void  main(void)
 				case 7:local_u8secondLSB=local_u8KeyPressed;break;
 
 				default:break;
-
 				}
 
-				CLCD_u8GoToxyPos(local_s8ColPos,local_u8RowPos);
+				CLCD_u8GoToxyPos(local_s8ColPos,u8ROWNUM);
 				CLCD_voidDisplayNumber(local_u8KeyPressed);
-
 			}
 		}
 
