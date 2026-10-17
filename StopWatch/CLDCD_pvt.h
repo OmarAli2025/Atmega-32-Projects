@@ -1,0 +1,25 @@
+#ifndef CLCD_PVT_H
+#define CLCD_PVT_H
+
+#define u8_FUCTIONSET2_4BIT_COMM CONC_BIT(0,0,0,0,CLCD_u8NLINESNUM,CLCD_u8FONTSIZE,0,0)
+
+# define u8_FUNCTIONSET_COMM 0b100000|(1<<4)|( CLCD_u8NLINESNUM<<3)|(CLCD_u8FONTSIZE<<2)
+
+# define u8_DISPLAYMODE_COMM 0b1000|(CLCD_u8DISPLAYMODE<<2)|( CLCD_u8CURSORNMODE<<1)|(CLCD_u8BLINKNMODE<<0)
+
+# define u8_CLEARDISP_COMM 0b1
+
+# define u8_FOUR_BITMODE 1
+# define u8EIGHT_BITMODE 2
+
+#define u8_FUCTIONSET4BIT_COMM 0b0010
+
+# define u8_DDRAMLINE2 0x40
+
+#if CLCD_u8BITMODE==u8_FOUR_BITMODE
+
+static void voidSendHalfDataPort(uint8t copy_u8halfdata);
+
+#endif
+
+#endif
